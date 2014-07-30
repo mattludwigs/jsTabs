@@ -21,34 +21,43 @@
 
 
     addClickEvent: function () {
-      var self = this,
-          tabs = this.getTabList(),
+     var tabs = this.getTabList(),
           i;
 
       for (i = 0; i < tabs.length; i++) {
-        tabs[i].addEventListener('click', self.setActive(tabs[i]), false)
+        tabs[i].addEventListener('click', this.setActive.bind(this, tabs[i]), false)
       }
 
     },
 
     setActive: function (elem) {
 
-      var element = elem.childNodes[0];
-      var hash = this.getHash();
+     var element = elem.childNodes[0],
+          hash = this.getHash();
 
-      if (hash === element.getAttribute('href')) {
-        console.log(hash);
-        element.setAttribute('class', 'active');
-      }
+     if (this.currentEelement) {
+       this.currentEelement.classList.remove('active');
+     }
 
+      console.log(this);
+      element.classList.add('active');
+
+      this.currentEelement = element;
     },
 
     getHash: function () {
       return window.location.hash;
     },
 
+    setCurrent: function () {
+
+      var hash =
+
+
+    },
 
     init: function () {
+      this.tabs = this.getTabList();
       this.addClickEvent();
     }
 

@@ -1,6 +1,5 @@
 var http = require('http'),
     fs = require('fs'),
-    bodyParser = require('body-parser')(),
     mongoose = require('mongoose');
 
 http.createServer(function (req, res) {
@@ -12,15 +11,26 @@ http.createServer(function (req, res) {
       if (err) {
         console.log(err);
       }
+
       res.writeHead(200, {'Content-Type': 'text/html'});
       res.write(data);
       res.end();
     })
   }
 
-  if (req.method === 'POST') {
-    console.log(req.body);
+  if (req.url === '/worked') {
+//    console.log(req);
+    var obj = {};
 
+    req.on('data', function (chuck) {
+      chuck.toString().split('&').forEach(function (string) {
+        var s = string.split('=');
+        obj[s[0]] = s[1];
+      });
+
+      console.log(JSON.stringify(obj));
+
+    });
     res.end();
   }
 
