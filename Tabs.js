@@ -1,4 +1,4 @@
-(function () {
+function Tabsinit() {
 
   function Tabs() {
 
@@ -7,6 +7,7 @@
   Tabs.prototype = {
 
     init: function () {
+      this.setCurrent();
       this.tabs = this.getTabList();
       this.addClickEvent();
     },
@@ -54,15 +55,16 @@
       return window.location.hash;
     },
 
-    // setCurrent: function () {
+    setCurrent: function () {
+      this.hash;
 
-    //   var hash =
-
-
-    // }
+      window.addEventListener('load', function () {
+        this.hash = this.getHash();
+      }.bind(this), true);
+    }
 
   };
-  
-  return new Tabs().init();
-})();
 
+ new Tabs().init();
+
+};
