@@ -6,6 +6,11 @@
 
   Tabs.prototype = {
 
+    init: function () {
+      this.tabs = this.getTabList();
+      this.addClickEvent();
+    },
+
     getTabList: function () {
       var tabArray = document.getElementById('tabs').children,
           tabs =[],
@@ -49,20 +54,15 @@
       return window.location.hash;
     },
 
-    setCurrent: function () {
+    // setCurrent: function () {
 
-      var hash =
+    //   var hash =
 
 
-    },
-
-    init: function () {
-      this.tabs = this.getTabList();
-      this.addClickEvent();
-    }
+    // }
 
   };
-var tab = new Tabs();
-tab.init();
-
+  
+  return new Tabs().init();
 })();
+

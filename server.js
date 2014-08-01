@@ -1,7 +1,16 @@
 var http = require('http'),
-    fs = require('fs');
+    fs = require('fs'),
+    staticFiles = require('./static');
 
 http.createServer(function (req, res) {
+
+// var js = [];
+
+// if (req.url.indexOf('.js') !== -1) {
+//   js.push(req.url);
+
+//   console.log(js);
+// }
 
 //  console.log(req);
 
@@ -16,8 +25,19 @@ http.createServer(function (req, res) {
     })
   }
 
-  if (req.url.indexOf('.js') !== -1) {
-    fs.readFile(__dirname + '/script.js', function (err, data) {
+  if (req.url === "/Tabs.js") {
+    fs.readFile(__dirname + '/Tabs.js', function (err, data) {
+      if (err) {
+        console.log(err);
+      }
+      res.writeHead(200, {'Content-Type': 'text/javascript'});
+      res.write(data);
+      res.end();
+    });
+  }
+
+  if (req.url === "/main.js") {
+    fs.readFile(__dirname + '/main.js', function (err, data) {
       if (err) {
         console.log(err);
       }
@@ -28,6 +48,8 @@ http.createServer(function (req, res) {
   }
 
   if (req.url.indexOf('.css') !== -1) {
+    console.log(req.url)
+
     fs.readFile(__dirname + '/style.css', function (err, data) {
       if (err) {
         console.log(err);
