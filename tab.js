@@ -8,29 +8,17 @@ function Tabinit() {
   Tab.prototype = {
 
     init: function () {
-
+      this.setCurrentTab();
     },
 
     getCurrentHash: function () {
 
       return window.location.hash;
 
-    },
-
-    setCurrentTab: function () {
-      this.tabElem = document.getElementById('tabs').childern;
-
-      var hash = this.getCurrentHash();
-
-      console.log(this.tabElem);
-
-
-
     }
-
 
 
   }
 
-  return Tab.init();
+  new Tab().init();
 };
