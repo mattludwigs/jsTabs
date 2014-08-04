@@ -1,7 +1,7 @@
 function Tabinit() {
   'use strict';
 
-  function Tab {
+  function Tab() {
 
   }
 
@@ -9,14 +9,28 @@ function Tabinit() {
 
     init: function () {
 
+    },
+
+    getCurrentHash: function () {
+
+      return window.location.hash;
+
+    },
+
+    setCurrentTab: function () {
+      this.tabElem = document.getElementById('tabs').childern;
+
+      var hash = this.getCurrentHash();
+
+      console.log(this.tabElem);
+
+
+
     }
 
-    currentTab: function () {
-      window.addEventListener('load', function () {
 
-      });
-    }
 
   }
 
+  return Tab.init();
 };

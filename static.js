@@ -1,4 +1,6 @@
-module.exports = function (reqUrl, config) {
+module.exports = function (reqUrl, res, config) {
+	
+
 	
 
 

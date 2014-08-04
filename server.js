@@ -36,6 +36,17 @@ http.createServer(function (req, res) {
     });
   }
 
+  if (req.url === "/tab.js") {
+    fs.readFile(__dirname + '/tab.js', function (err, data) {
+      if (err) {
+        console.log(err);
+      }
+      res.writeHead(200, {'Content-Type': 'text/javascript'});
+      res.write(data);
+      res.end();
+    });
+  }
+
   if (req.url === "/main.js") {
     fs.readFile(__dirname + '/main.js', function (err, data) {
       if (err) {
