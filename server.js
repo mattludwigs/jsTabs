@@ -59,7 +59,6 @@ http.createServer(function (req, res) {
   }
 
   if (req.url.indexOf('.css') !== -1) {
-    console.log(req.url)
 
     fs.readFile(__dirname + '/style.css', function (err, data) {
       if (err) {
@@ -72,4 +71,4 @@ http.createServer(function (req, res) {
   }
 })
     .listen(9778);
-console.log('send req');
+console.log('Greb a beer @ localhost:9778');

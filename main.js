@@ -6,9 +6,62 @@
 
 	TabContianer.prototype = {
 
+		init: function () {
+			this.clickOnChildern();
+		},
+
 		getTabContianer: function () {
-			return document.getElementById(this.options.tabContianer);
+			return document.getElementById(this.options.contianer);
+		},
+
+		// getContentContianer: function( )
+
+		clickOnChildern: function () {
+			var childern = this.filterChildern(),
+					i;
+			console.log(childern);
+
+			for (i = 0; i < childern.length; i++) {
+				childern[i].addEventListener('click', function () {
+
+				console.log(this.findActive());
+
+				}.bind(this, null));
+			}
+			
+		},
+
+		filterChildern: function () {
+			var childs = this.getTabContianer().childNodes,
+					filtered = [],
+					i;
+
+			for (i = 0; i < childs.length; i++) {
+				if (childs[i].nodeName === 'LI') {
+					filtered.push(childs[i]);
+				} 
+			}
+
+			return filtered;
+		},
+
+		findActive: function () {
+			var childern = this.filterChildern(),
+					active,
+					i;
+
+			for (i = 0; i < childern.length; i++) {
+				// TODO: make this work right!!
+				if (childern[i].classList.contains('active')) {
+					active = 'bob';
+				} else {
+					active = 'ted'
+				}
+			}
+
+			return active;
 		}
+
 }
 
 
@@ -20,7 +73,7 @@
 	Tab.prototype = {
 
 		init: function () {
-			this.setCurrent();
+			this.loadSetCurrent();
 			this.setClick();
 			// this.setActive();
 		},
@@ -36,54 +89,52 @@
 					i;
 
 			for (i = 0; i < tabs.length; i++) {
-				tabs[i].addEventListener('click', function () {
-
-				});
+				tabs[i].addEventListener('click', this.setActive.bind(this, tabs[i]));
 			}
 		},
 
 
 		setActive: function (elem) {
-			var element = elem;
-
-			// console.log(element)
-			//
-			// this.setCurrent();
-			//
-			// console.log(this.currentElement);
-			//
-			// if (this.currentElement) {
-			// 	this.currentElement.classList.remove('active');
-			// }
-			//
-			// console.log(this);
-			// element.classList.add('active');
-			//
-			// this.currentElement = element;
+			if (elem.href !== this.currentElement) {
+				this.romoveActive();
+				elem.classList.add('active');
+				this.currentElement = this.pathReplace(elem.href, this.options.path, '');
+				console.log(this.currentElement);
+			}
 		},
 
-		setCurrent: function () {
+		romoveActive: function () {
+			var href,
+					i;
+
+			for (i = 0; i < this.getTabList().length; i++) {
+				href = this.pathReplace(this.getTabList()[i].href, this.options.path, '');
+				if (href === this.currentElement) {
+					this.getTabList()[i].classList.remove('active');
+				}
+			}
+		},
+
+		loadSetCurrent: function () {
 			var hash = window.location.hash !== '' ? window.location.hash : '#tab1';
 					tabList = this.getTabList();
 			this.currentElement = hash;
-
-			console.log(hash);
-			console.log(tabList[0].href.replace('http://localhost:9778/', ''));
 
 			if (window.location.hash === '') {
 				window.location.hash = hash;
 			}
 
 			for (var i = 0; i < tabList.length; i++) {
-				if (hash === tabList[i].href.replace('http://localhost:9778/', '')) {
+				if (hash === this.pathReplace(tabList[i].href, this.options.path, '')) {
 					tabList[i].classList.add('active');
 				}
 			}
 
+		},
+
+		pathReplace: function (elem, path, replaceWith) {
+			return elem.replace(path, replaceWith);
 		}
-
-
-
 	}
 
 
@@ -92,15 +143,16 @@
 		window.addEventListener('load', function () {
 
 			var tabContianer = new TabContianer({
-				tabContianer: 'tabs'
+				contianer: 'tabs'
 			});
 
 			var tab = new Tab({
-				tabElem: 'a'
+				tabElem: 'a',
+				path: 'http://localhost:9778/'
 			});
 
-
 			tab.init();
+			tabContianer.init();
 		});
 
 	}
