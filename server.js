@@ -4,16 +4,6 @@ var http = require('http'),
 
 http.createServer(function (req, res) {
 
-// var js = [];
-
-// if (req.url.indexOf('.js') !== -1) {
-//   js.push(req.url);
-
-//   console.log(js);
-// }
-
-//  console.log(req);
-
   if (req.url === '/') {
     fs.readFile(__dirname + '/index.html', function (err, data) {
       if (err) {
