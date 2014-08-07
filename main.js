@@ -86,9 +86,7 @@
 			}
 
 		}
-
 }
-
 
 	// Tab object for individual tab
 	function Tab(options) {
@@ -164,7 +162,6 @@
 	function main() {
 
 		window.addEventListener('load', function () {
-
 			var tabContianer = new TabContianer({
 				contianer: 'tabs',
 				content: 'tab-content'
@@ -181,8 +178,6 @@
 
 	}
 
-
 	main();
-
 
 })(); // end function
