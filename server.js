@@ -1,6 +1,6 @@
 var http = require('http'),
-    fs = require('fs'),
-    staticFiles = require('./static');
+    fs = require('fs');
+    // staticFiles = require('./static');
 
 http.createServer(function (req, res) {
 
@@ -23,28 +23,6 @@ http.createServer(function (req, res) {
       res.write(data);
       res.end();
     })
-  }
-
-  if (req.url === "/Tabs.js") {
-    fs.readFile(__dirname + '/Tabs.js', function (err, data) {
-      if (err) {
-        console.log(err);
-      }
-      res.writeHead(200, {'Content-Type': 'text/javascript'});
-      res.write(data);
-      res.end();
-    });
-  }
-
-  if (req.url === "/tab.js") {
-    fs.readFile(__dirname + '/tab.js', function (err, data) {
-      if (err) {
-        console.log(err);
-      }
-      res.writeHead(200, {'Content-Type': 'text/javascript'});
-      res.write(data);
-      res.end();
-    });
   }
 
   if (req.url === "/main.js") {

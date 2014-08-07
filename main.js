@@ -49,8 +49,6 @@
 					active,
 					i;
 
-			console.log(node);
-
 			for (i = 0; i < node.length; i++) {
 				if (node[i].classList.contains('active')) {
 					active = node[i];
@@ -66,14 +64,17 @@
 			var tabId = activeTab.href.replace('http://localhost:9778/', ''),
 					i;
 
-			console.log(tabId + ' : ' + this.content.length);
-
 			for (i = 0; i < this.content.length; i++) {
 				if (this.content[i].getAttribute('id') === tabId.replace('#', '')) {
-					console.log(this.content[i]);
 					this.content[i].classList.remove('hide');
+				} else {
+					this.hideContent(this.content[i]);
 				}
 			}
+		},
+
+		hideContent: function (nonActive) {
+			nonActive.classList.add('hide');
 		},
 
 		setDefaultContianer: function () {
@@ -83,7 +84,6 @@
 			for (i = 0; i < this.content.length; i++) {
 				if (this.content[i].getAttribute('id') === hash.replace('#', '')) {
 					this.content[i].classList.remove('hide');
-					console.log('fd');
 				}
 			}
 
@@ -126,7 +126,6 @@
 				this.romoveActive();
 				elem.classList.add('active');
 				this.currentElement = this.pathReplace(elem.href, this.options.path, '');
-				console.log(this.currentElement);
 			}
 		},
 
@@ -163,7 +162,6 @@
 			return elem.replace(path, replaceWith);
 		}
 	}
-
 
 	function main() {
 
