@@ -16,8 +16,6 @@
 			return document.getElementById(this.options.contianer);
 		},
 
-		// getContentContianer: function( )
-
 		clickOnChildern: function () {
 			var childern = this.filterChildern(),
 					i;
