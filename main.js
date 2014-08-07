@@ -2,11 +2,13 @@
 
 	function TabContianer(options) {
 		this.options = options;
+		this.content = document.getElementsByClassName(this.options.content);
 	}
 
 	TabContianer.prototype = {
 
 		init: function () {
+			this.setDefaultContianer();
 			this.clickOnChildern();
 		},
 
@@ -19,15 +21,11 @@
 		clickOnChildern: function () {
 			var childern = this.filterChildern(),
 					i;
-			console.log(childern);
+
 
 			for (i = 0; i < childern.length; i++) {
-				childern[i].addEventListener('click', function () {
-
-				console.log(this.findActive());
-
-				}.bind(this, null));
-			}
+				childern[i].addEventListener('click', this.findActive.bind(this, childern[i]));
+			}	
 			
 		},
 
@@ -45,21 +43,50 @@
 			return filtered;
 		},
 
-		findActive: function () {
-			var childern = this.filterChildern(),
+		findActive: function (elem) {
+			var child = elem,
+					node = child.childNodes,
 					active,
 					i;
 
-			for (i = 0; i < childern.length; i++) {
-				// TODO: make this work right!!
-				if (childern[i].classList.contains('active')) {
-					active = 'bob';
-				} else {
-					active = 'ted'
+			console.log(node);
+
+			for (i = 0; i < node.length; i++) {
+				if (node[i].classList.contains('active')) {
+					active = node[i];
 				}
 			}
 
+			this.displayContent(active);
+
 			return active;
+		},
+
+		displayContent: function (activeTab) {
+			var tabId = activeTab.href.replace('http://localhost:9778/', ''),
+					i;
+
+			console.log(tabId + ' : ' + this.content.length);
+
+			for (i = 0; i < this.content.length; i++) {
+				if (this.content[i].getAttribute('id') === tabId.replace('#', '')) {
+					console.log(this.content[i]);
+					this.content[i].classList.remove('hide');
+				}
+			}
+		},
+
+		setDefaultContianer: function () {
+			var hash = window.location.hash,
+					i;
+
+			for (i = 0; i < this.content.length; i++) {
+				if (this.content[i].getAttribute('id') === hash.replace('#', '')) {
+					this.content[i].classList.remove('hide');
+					console.log('fd');
+				}
+			}
+
 		}
 
 }
@@ -143,7 +170,8 @@
 		window.addEventListener('load', function () {
 
 			var tabContianer = new TabContianer({
-				contianer: 'tabs'
+				contianer: 'tabs',
+				content: 'tab-content'
 			});
 
 			var tab = new Tab({

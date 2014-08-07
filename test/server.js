@@ -4,6 +4,8 @@ var http = require('http'),
 
 http.createServer(function (req, res) {
 
+  'use strict';
+
 //  console.log(req);
 
   if (req.url === '/') {
@@ -19,7 +21,6 @@ http.createServer(function (req, res) {
   }
 
   if (req.url === '/worked') {
-//    console.log(req);
     var obj = {};
 
     req.on('data', function (chuck) {
@@ -30,8 +31,22 @@ http.createServer(function (req, res) {
 
       console.log(JSON.stringify(obj));
 
+      fs.writeFile(__dirname + '/message.json', JSON.stringify(obj, null, '\t'), function (err) {
+        if (err) {
+          console.log(err);
+        }
+
+        fs.readFile(__dirname + '/message.json', function (err, data) {
+          if (err) {
+            console.log(err);
+          }
+          res.writeHead(200, {'Content-Type': 'application/json'});
+          res.write(data);
+          res.end();
+        })
+      })
+
     });
-    res.end();
   }
 
   if (req.url.indexOf('.js') !== -1) {
