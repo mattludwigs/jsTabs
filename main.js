@@ -2,90 +2,112 @@
 
 	function TabContianer(options) {
 		this.options = options;
-		this.content = document.getElementsByClassName(this.options.content);
+		this.currentElement = null;
+		this.contents = document.getElementsByClassName(this.options.content);
+		this.elementMap = this._createElementMap();
 	}
 
 	TabContianer.prototype = {
 
-		init: function () {
-			this.setDefaultContianer();
-			this.clickOnChildern();
+		// getTabContianer: function () {
+		// 	return document.getElementById(this.options.contianer);
+		// },
+
+		show: function (id) {
+			this.elementMap[id].classList.remove('hide');
+			if (this.currentElement) {
+				this.currentElement.classList.add('hide');
+			}
+			this.currentElement = this.elementMap[id];
 		},
 
-		getTabContianer: function () {
-			return document.getElementById(this.options.contianer);
-		},
+		_createElementMap: function () {
+			var map = {},
+			length = this.contents.length,
+			key,
+			value,
+			i;
 
-		clickOnChildern: function () {
-			var childern = this.filterChildern(),
-					i;
+			for (i = 0; i < length; i++) {
+				key = this.contents[i].id;
+				value = this.contents[i];
 
-
-			for (i = 0; i < childern.length; i++) {
-				childern[i].addEventListener('click', this.findActive.bind(this, childern[i]));
-			}	
-			
-		},
-
-		filterChildern: function () {
-			var childs = this.getTabContianer().childNodes,
-					filtered = [],
-					i;
-
-			for (i = 0; i < childs.length; i++) {
-				if (childs[i].nodeName === 'LI') {
-					filtered.push(childs[i]);
-				} 
+				map[key] = value;
 			}
 
-			return filtered;
-		},
-
-		findActive: function (elem) {
-			var child = elem,
-					node = child.childNodes,
-					active,
-					i;
-
-			for (i = 0; i < node.length; i++) {
-				if (node[i].classList.contains('active')) {
-					active = node[i];
-				}
-			}
-
-			this.displayContent(active);
-
-			return active;
-		},
-
-		displayContent: function (activeTab) {
-			var tabId = activeTab.href.replace('http://localhost:9778/', ''),
-					i;
-
-			for (i = 0; i < this.content.length; i++) {
-				if (this.content[i].getAttribute('id') === tabId.replace('#', '')) {
-					this.content[i].classList.remove('hide');
-				} else {
-					this.hideContent(this.content[i]);
-				}
-			}
-		},
-
-		hideContent: function (nonActive) {
-			nonActive.classList.add('hide');
-		},
-
-		setDefaultContianer: function () {
-			var hash = window.location.hash,
-					i;
-
-			for (i = 0; i < this.content.length; i++) {
-				if (this.content[i].getAttribute('id') === hash.replace('#', '')) {
-					this.content[i].classList.remove('hide');
-				}
-			}
-
+			return map;
 		}
+		//
+		// clickOnChildern: function () {
+		// 	var childern = this.filterChildern(),
+		// 			i;
+		//
+		//
+		// 	// for (i = 0; i < childern.length; i++) {
+		// 	// 	childern[i].addEventListener('click', this.findActive.bind(this, childern[i]));
+		// 	// }
+		//
+		// },
+		//
+		// filterChildern: function () {
+		// 	var childs = this.getTabContianer().childNodes,
+		// 			filtered = [],
+		// 			i;
+		//
+		// 	for (i = 0; i < childs.length; i++) {
+		// 		if (childs[i].nodeName === 'LI') {
+		// 			filtered.push(childs[i]);
+		// 		}
+		// 	}
+		//
+		// 	return filtered;
+		// },
+
+		// findActive: function (elem) {
+		// 	var child = elem,
+		// 			node = child.childNodes,
+		// 			active,
+		// 			i;
+		//
+		// 	for (i = 0; i < node.length; i++) {
+		// 		if (node[i].classList.contains('active')) {
+		// 			active = node[i];
+		// 		}
+		// 	}
+		//
+		// 	this.displayContent(active);
+		//
+		// 	return active;
+		// },
+
+		// displayContent: function (activeTab) {
+		// 	var tabId = activeTab.href.replace('http://localhost:9778/', ''),
+		// 			i;
+		//
+		// 	for (i = 0; i < this.content.length; i++) {
+		// 		if (this.content[i].getAttribute('id') === tabId.replace('#', '')) {
+		// 			this.content[i].classList.remove('hide');
+		// 		} else {
+		// 			this.hideContent(this.content[i]);
+		// 		}
+		// 	}
+		// },
+		//
+		// hideContent: function (nonActive) {
+		// 	nonActive.classList.add('hide');
+		// },
+		//
+		// setDefaultContianer: function () {
+		// 	var hash = window.location.hash,
+		// 			i;
+		//
+		// 	for (i = 0; i < this.content.length; i++) {
+		// 		if (this.content[i].getAttribute('id') === hash.replace('#', '')) {
+		// 			this.content[i].classList.remove('hide');
+		// 		}
+		// 	}
+		//
+		// }
 }
 
 	// Tab object for individual tab
@@ -118,11 +140,17 @@
 
 
 		setActive: function (elem) {
+			console.log(this.currentElement, elem);
 			if (elem.href !== this.currentElement) {
 				this.romoveActive();
 				elem.classList.add('active');
 				this.currentElement = this.pathReplace(elem.href, this.options.path, '');
+				this.cbOnActive(this.currentElement);
 			}
+		},
+
+		setActiveCallBack: function (cb) {
+			this.cbOnActive = cb;
 		},
 
 		romoveActive: function () {
@@ -152,6 +180,8 @@
 				}
 			}
 
+			this.cbOnActive(hash);
+
 		},
 
 		pathReplace: function (elem, path, replaceWith) {
@@ -172,8 +202,11 @@
 				path: 'http://localhost:9778/'
 			});
 
+			tab.setActiveCallBack(function (hash) {
+				tabContianer.show(hash.substr(1));
+			})
 			tab.init();
-			tabContianer.init();
+			// tabContianer.init();
 		});
 
 	}
